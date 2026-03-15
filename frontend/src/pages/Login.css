@@ -1,0 +1,84 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--green-pale) 0%, var(--cream) 50%, var(--cream-warm) 100%);
+}
+
+.login-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--shadow-hover);
+  border: 1px solid var(--border);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Logo en login: usar VITE_LOGO_URL en .env */
+.login-logo {
+  max-width: 180px;
+  max-height: 80px;
+  object-fit: contain;
+  margin: 0 auto 0.5rem;
+  display: block;
+}
+
+.login-header h1 {
+  color: var(--green-dark);
+  font-size: 1.75rem;
+  margin: 0;
+}
+
+.login-header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+  color: var(--text-primary);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.login-form input::placeholder {
+  color: var(--text-muted);
+}
+
+.login-form button {
+  width: 100%;
+  padding: 0.9rem;
+  background: var(--green-main);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background: var(--green-dark);
+}
+
+.login-error {
+  background: #fee2e2;
+  color: var(--red-alert);
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
