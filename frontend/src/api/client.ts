@@ -34,9 +34,19 @@ export async function apiFetch<T>(
   return res.json() as Promise<T>;
 }
 
+/** Construye URL con query params opcionales */
+function buildUrl(endpoint: string, params?: Record<string, string | number | boolean>): string {
+  if (!params || Object.keys(params).length === 0) return endpoint;
+  const q = new URLSearchParams();
+  Object.entries(params).forEach(([k, v]) => q.set(k, String(v)));
+  const sep = endpoint.includes('?') ? '&' : '?';
+  return endpoint + sep + q.toString();
+}
+
 /** Wrapper estilo axios para compatibilidad con componentes. */
 const api = {
-  get: <T>(endpoint: string) => apiFetch<T>(endpoint).then(data => ({ data })),
+  get: <T>(endpoint: string, opts?: { params?: Record<string, string | number | boolean> }) =>
+    apiFetch<T>(buildUrl(endpoint, opts?.params)).then(data => ({ data })),
   post: <T>(endpoint: string, body?: unknown) =>
     apiFetch<T>(endpoint, { method: 'POST', body: body ? JSON.stringify(body) : undefined }).then(data => ({ data })),
   patch: <T>(endpoint: string, body?: unknown) =>
@@ -48,7 +58,14 @@ const api = {
     const headers: HeadersInit = {};
     if (token) (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
     return fetch(`${API_BASE}${endpoint}`, { method: 'POST', body: formData, headers })
-      .then(res => { if (!res.ok) throw new Error(res.statusText); return res.json() as Promise<T>; })
+      .then(async res => {
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({ detail: res.statusText }));
+          const msg = Array.isArray(err.detail) ? err.detail.join(', ') : (err.detail || res.statusText);
+          throw new Error(typeof msg === 'string' ? msg : res.statusText);
+        }
+        return res.json() as Promise<T>;
+      })
       .then(data => ({ data }));
   },
 };

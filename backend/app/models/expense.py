@@ -35,6 +35,9 @@ class Expense(Base, TimestampMixin):
     category_id = Column(Integer, ForeignKey("expense_categories.id"))
     supplier_id = Column(Integer, ForeignKey("suppliers.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
+    cash_register_id = Column(Integer, ForeignKey("cash_register_sessions.id"), nullable=True)
+    payment_type = Column(String(50), nullable=True)  # efectivo, sinpe, tarjeta_credito, tarjeta_debito
 
     category = relationship("ExpenseCategory", back_populates="expenses")
+    cash_register = relationship("CashRegisterSession", back_populates="expenses")
     supplier = relationship("Supplier", back_populates="expenses")

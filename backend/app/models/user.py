@@ -36,6 +36,7 @@ class User(Base, TimestampMixin):
 
     role = relationship("Role", back_populates="users")
     password_reset_tokens = relationship("PasswordResetToken", back_populates="user", cascade="all, delete-orphan")
+    cash_register_sessions = relationship("CashRegisterSession", back_populates="user")
 
 
 class PasswordResetToken(Base):

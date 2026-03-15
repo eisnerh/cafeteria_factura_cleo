@@ -51,11 +51,16 @@ class ExpenseCategoryResponse(ExpenseCategoryBase):
         from_attributes = True
 
 
+PAYMENT_TYPES = ("efectivo", "sinpe", "tarjeta_credito", "tarjeta_debito")
+
+
 class ExpenseBase(BaseModel):
     amount: Decimal
     description: Optional[str] = None
     category_id: Optional[int] = None
     supplier_id: Optional[int] = None
+    cash_register_id: Optional[int] = None
+    payment_type: Optional[str] = None
 
 
 class ExpenseCreate(ExpenseBase):
@@ -67,6 +72,7 @@ class ExpenseUpdate(BaseModel):
     description: Optional[str] = None
     category_id: Optional[int] = None
     supplier_id: Optional[int] = None
+    payment_type: Optional[str] = None
 
 
 class ExpenseResponse(ExpenseBase):

@@ -56,14 +56,25 @@ def generar_xml_factura(cliente: Dict, items: List[Dict], total: Decimal, subtot
     return xml, clave
 
 
-def emitir_documento_simulado(tipo: str, cliente: Dict, items: List[Dict], total: float, subtotal: float) -> Dict[str, Any]:
+def emitir_documento_simulado(
+    tipo: str, cliente: Dict, items: List[Dict], total: float, subtotal: float,
+    consecutivo_num: int = None,
+) -> Dict[str, Any]:
     """
     Emite documento en modo simulación.
     Retorna datos del documento sin enviar a Hacienda.
+    consecutivo_num: número secuencial único para evitar claves duplicadas (opcional).
     """
     impuesto = total - subtotal
-    clave = generar_clave_electronica()
-    consecutivo = f"001-001-{datetime.utcnow().strftime('%Y%m%d')}-{abs(hash(clave) % 100000):05d}"
+    if consecutivo_num is None:
+        # Fallback: timestamp en microsegundos para unicidad
+        import time
+        consecutivo_num = int(time.time() * 1_000_000) % (10 ** 20)
+    consecutivo_str = str(consecutivo_num).zfill(20)
+    clave = generar_clave_electronica(consecutivo=consecutivo_str)
+    # Formato máximo 20 chars para BD varchar(20): 001-001-YYMMDD-NNNN
+    now = datetime.utcnow()
+    consecutivo = f"001-001-{now.strftime('%y%m%d')}-{consecutivo_num % 10000:04d}"
     return {
         "clave": clave,
         "consecutivo": consecutivo,
@@ -85,6 +96,7 @@ class HaciendaService:
         items: List[Dict],
         total: float,
         subtotal: float,
+        consecutivo_num: int = None,
     ) -> Dict[str, Any]:
         """Emite documento. En modo simulación no envía a Hacienda."""
         client_dict = {}
@@ -93,4 +105,4 @@ class HaciendaService:
                 "nombre": getattr(cliente, "nombre_legal", None) or getattr(cliente, "name", "Cliente General"),
                 "nit": getattr(cliente, "nit", None) or "0000000000",
             }
-        return emitir_documento_simulado(tipo, client_dict, items, total, subtotal)
+        return emitir_documento_simulado(tipo, client_dict, items, total, subtotal, consecutivo_num)

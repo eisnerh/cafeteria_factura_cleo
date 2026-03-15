@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700&display=swap');
 
 * {
   box-sizing: border-box;
@@ -7,42 +7,54 @@
 }
 
 :root {
-  /* Paleta Cafetería - verdes cálidos y cremas */
-  --green-dark: #1e4333;
-  --green-main: #2d6a4f;
-  --green-light: #40916c;
-  --green-pale: #d8f3dc;
-  --green-subtle: rgba(45, 106, 79, 0.06);
-  --cream: #fefcf9;
-  --cream-warm: #f8f4ef;
-  --cream-deep: #ede8e1;
+  /* Paleta moderna - Verdes vivos y neutros sofisticados */
+  --green-dark: #0f2922;
+  --green-main: #059669;
+  --green-light: #10b981;
+  --green-glow: rgba(16, 185, 129, 0.4);
+  --green-pale: #d1fae5;
+  --green-subtle: rgba(5, 150, 105, 0.06);
+  --cream: #fafaf9;
+  --cream-warm: #f5f5f4;
+  --cream-deep: #e7e5e4;
   --white: #ffffff;
-  --text-primary: #1a2e24;
-  --text-secondary: #495d54;
-  --text-muted: #6b7d75;
-  --border: #e4eae6;
-  --red-alert: #c92a2a;
-  --red-badge: #e53935;
-  --radius: 14px;
-  --radius-sm: 10px;
-  --radius-lg: 22px;
-  --radius-xl: 28px;
-  --shadow: 0 2px 8px rgba(30, 67, 51, 0.06);
-  --shadow-card: 0 4px 20px rgba(30, 67, 51, 0.08);
-  --shadow-md: 0 4px 20px rgba(30, 67, 51, 0.08);
-  --shadow-hover: 0 12px 40px rgba(30, 67, 51, 0.12);
+  --text-primary: #0c0a09;
+  --text-secondary: #57534e;
+  --text-muted: #78716c;
+  --border: #e7e5e4;
+  --red-alert: #dc2626;
+  --red-badge: #ef4444;
+
+  /* Bordes modernos - más redondeados */
+  --radius: 16px;
+  --radius-sm: 12px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  /* Sombras suaves y elevadas */
+  --shadow: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.06), 0 8px 10px -6px rgba(0,0,0,0.04);
+  --shadow-hover: 0 25px 50px -12px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 40px -10px var(--green-glow);
 
   /* Layout */
   --bg-secondary: var(--cream);
   --bg-sidebar: var(--white);
   --bg-hover: var(--green-subtle);
   --accent: var(--green-main);
-  --transition: 0.2s ease;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --glass: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.5);
 }
 
 body {
-  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--cream);
+  font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(5, 150, 105, 0.15), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(16, 185, 129, 0.08), transparent),
+    var(--cream);
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.6;

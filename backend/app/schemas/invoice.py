@@ -40,6 +40,7 @@ class InvoiceCreate(InvoiceBase):
 class InvoiceListResponse(BaseModel):
     """Resumen para listado de facturas."""
     id: int
+    order_id: Optional[int] = None
     clave: Optional[str] = None
     consecutivo: Optional[str] = None
     tipo_documento: str

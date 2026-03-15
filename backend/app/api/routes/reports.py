@@ -82,12 +82,18 @@ def income_vs_expenses(
     desde: date = Query(None),
     hasta: date = Query(None),
 ):
-    """Ingresos vs gastos para rentabilidad."""
+    """Ingresos (ventas cobradas) vs gastos para rentabilidad."""
     hasta = hasta or date.today()
     desde = desde or hasta - timedelta(days=30)
+    # Ingresos = ventas cobradas (Orders con status cobrado)
     ingresos = (
-        db.query(func.sum(Invoice.total))
-        .filter(Invoice.created_at >= desde, Invoice.created_at <= hasta)
+        db.query(func.coalesce(func.sum(OrderItem.quantity * OrderItem.unit_price), 0))
+        .join(Order, OrderItem.order_id == Order.id)
+        .filter(
+            Order.status == "cobrado",
+            func.date(Order.updated_at) >= desde,
+            func.date(Order.updated_at) <= hasta,
+        )
         .scalar() or Decimal("0")
     )
     gastos = (
@@ -99,6 +105,69 @@ def income_vs_expenses(
         "ingresos": float(ingresos),
         "gastos": float(gastos),
         "utilidad_bruta": float(ingresos - gastos),
+    }
+
+
+@router.get("/sales-by-cobro")
+def sales_by_cobro(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+    desde: date = Query(None),
+    hasta: date = Query(None),
+):
+    """Ventas cobradas por día (desde Orders, incluye sin facturar)."""
+    hasta = hasta or date.today()
+    desde = desde or hasta - timedelta(days=30)
+    from sqlalchemy import cast, Date
+    rows = (
+        db.query(
+            func.date(Order.updated_at).label("fecha"),
+            func.coalesce(func.sum(OrderItem.quantity * OrderItem.unit_price), 0).label("total"),
+        )
+        .join(OrderItem, OrderItem.order_id == Order.id)
+        .filter(
+            Order.status == "cobrado",
+            func.date(Order.updated_at) >= desde,
+            func.date(Order.updated_at) <= hasta,
+        )
+        .group_by(func.date(Order.updated_at))
+        .order_by("fecha")
+        .all()
+    )
+    return {"data": [{"date": str(r.fecha), "total": float(r.total or 0)} for r in rows]}
+
+
+@router.get("/sales-by-payment-type")
+def sales_by_payment_type(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+    desde: date = Query(None),
+    hasta: date = Query(None),
+):
+    """Ventas cobradas por tipo de pago."""
+    hasta = hasta or date.today()
+    desde = desde or hasta - timedelta(days=30)
+    rows = (
+        db.query(
+            Order.payment_type,
+            func.coalesce(func.sum(OrderItem.quantity * OrderItem.unit_price), 0).label("total"),
+            func.count(Order.id).label("cantidad"),
+        )
+        .join(OrderItem, OrderItem.order_id == Order.id)
+        .filter(
+            Order.status == "cobrado",
+            func.date(Order.updated_at) >= desde,
+            func.date(Order.updated_at) <= hasta,
+        )
+        .group_by(Order.payment_type)
+        .all()
+    )
+    labels = {"efectivo": "Efectivo", "sinpe": "Sinpe", "tarjeta_credito": "Tarjeta crédito", "tarjeta_debito": "Tarjeta débito"}
+    return {
+        "data": [
+            {"tipo": labels.get(r.payment_type or "efectivo", r.payment_type or "Efectivo"), "total": float(r.total or 0), "cantidad": r.cantidad}
+            for r in rows
+        ]
     }
 
 

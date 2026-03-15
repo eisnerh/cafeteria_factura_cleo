@@ -31,6 +31,8 @@ def create_expense(
         category_id=data.category_id,
         supplier_id=data.supplier_id,
         user_id=user.id,
+        cash_register_id=data.cash_register_id,
+        payment_type=data.payment_type,
     )
     db.add(expense)
     db.commit()
@@ -56,49 +58,7 @@ def list_expenses(
     return q.offset(skip).limit(limit).all()
 
 
-@router.get("/{id}", response_model=ExpenseResponse)
-def get_expense(
-    id: int,
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user),
-):
-    ex = db.query(Expense).filter(Expense.id == id).first()
-    if not ex:
-        raise HTTPException(404, "Gasto no encontrado")
-    return ex
-
-
-@router.patch("/{id}", response_model=ExpenseResponse)
-def update_expense(
-    id: int,
-    data: ExpenseUpdate,
-    db: Session = Depends(get_db),
-    user: User = Depends(require_role("administrador", "cajero")),
-):
-    ex = db.query(Expense).filter(Expense.id == id).first()
-    if not ex:
-        raise HTTPException(404, "Gasto no encontrado")
-    for k, v in data.model_dump(exclude_unset=True).items():
-        setattr(ex, k, v)
-    db.commit()
-    db.refresh(ex)
-    return ex
-
-
-@router.delete("/{id}")
-def delete_expense(
-    id: int,
-    db: Session = Depends(get_db),
-    user: User = Depends(require_role("administrador")),
-):
-    ex = db.query(Expense).filter(Expense.id == id).first()
-    if not ex:
-        raise HTTPException(404, "Gasto no encontrado")
-    db.delete(ex)
-    db.commit()
-    return {"message": "Gasto eliminado"}
-
-
+# Rutas /categories y /suppliers deben ir ANTES de /{id} para que no se confundan con el path param
 @router.post("/categories", response_model=ExpenseCategoryResponse)
 def create_category(
     data: ExpenseCategoryCreate,
@@ -202,3 +162,907 @@ def delete_supplier(
     db.delete(sup)
     db.commit()
     return {"message": "Proveedor eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+# Rutas de gasto individual: /{id} debe ir AL FINAL para no capturar "categories" ni "suppliers"
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}
+
+
+@router.get("/{id}", response_model=ExpenseResponse)
+def get_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    return ex
+
+
+@router.patch("/{id}", response_model=ExpenseResponse)
+def update_expense(
+    id: int,
+    data: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador", "cajero")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    for k, v in data.model_dump(exclude_unset=True).items():
+        setattr(ex, k, v)
+    db.commit()
+    db.refresh(ex)
+    return ex
+
+
+@router.delete("/{id}")
+def delete_expense(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    ex = db.query(Expense).filter(Expense.id == id).first()
+    if not ex:
+        raise HTTPException(404, "Gasto no encontrado")
+    db.delete(ex)
+    db.commit()
+    return {"message": "Gasto eliminado"}

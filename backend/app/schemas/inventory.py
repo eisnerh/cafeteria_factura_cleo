@@ -41,6 +41,7 @@ class ProductUpdate(BaseModel):
     price: Optional[Decimal] = None
     cost: Optional[Decimal] = None
     barcode: Optional[str] = None
+    stock: Optional[Decimal] = None
     min_stock: Optional[Decimal] = None
     category_id: Optional[int] = None
     is_active: Optional[bool] = None
@@ -50,6 +51,7 @@ class ProductResponse(ProductBase):
     id: int
     stock: Decimal
     created_at: Optional[datetime] = None
+    has_image: bool = False  # Calculado: True si existe imagen en uploads/products/
     class Config:
         from_attributes = True
 

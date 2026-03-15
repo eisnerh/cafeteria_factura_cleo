@@ -1,4 +1,5 @@
 """Rutas de pedidos y split de cuentas."""
+from datetime import datetime
 from decimal import Decimal
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
@@ -23,6 +24,7 @@ def create_order(
     order = Order(
         session_id=data.session_id,
         client_id=data.client_id,
+        cash_register_id=data.cash_register_id,
         notes=data.notes,
         status="pendiente",
     )
@@ -51,6 +53,7 @@ def create_order(
 def list_orders(
     session_id: Optional[int] = Query(None),
     status: Optional[str] = Query(None),
+    take_away: Optional[bool] = Query(None, description="Solo pedidos para llevar (notes empieza con PARA_LLEVAR)"),
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
@@ -62,7 +65,9 @@ def list_orders(
         q = q.filter(Order.session_id == session_id)
     if status:
         q = q.filter(Order.status == status)
-    return q.offset(skip).limit(limit).all()
+    if take_away:
+        q = q.filter(Order.notes.like("PARA_LLEVAR:%"))
+    return q.order_by(Order.id.desc()).offset(skip).limit(limit).all()
 
 
 @router.get("/{order_id}", response_model=OrderResponse)
@@ -91,8 +96,16 @@ def update_order(
         raise HTTPException(status_code=404, detail="Pedido no encontrado")
     if data.status is not None:
         order.status = data.status
+        # Si se cancela un pedido de mesa, liberar la mesa
+        if data.status == "cancelado" and order.session_id:
+            sess = db.query(TableSession).filter(TableSession.id == order.session_id).first()
+            if sess and sess.closed_at is None:
+                sess.closed_at = datetime.utcnow()
+                sess.table.state = "libre"
     if data.notes is not None:
         order.notes = data.notes
+    if data.payment_type is not None:
+        order.payment_type = data.payment_type
     db.commit()
     db.refresh(order)
     return order

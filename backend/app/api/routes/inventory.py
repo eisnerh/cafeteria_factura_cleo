@@ -2,10 +2,11 @@
 from decimal import Decimal
 from typing import Optional, List
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.upload_utils import get_image_path, save_image, delete_image, serve_image
 from app.models import Product, ProductCategory, ProductMovement
 from app.schemas.inventory import (
     ProductCreate, ProductUpdate, ProductResponse,
@@ -53,6 +54,44 @@ def update_category(
     return cat
 
 
+@router.get("/categories/{id}/image")
+def get_category_image(id: int, db: Session = Depends(get_db)):
+    """Sirve la imagen de la categoría si existe."""
+    cat = db.query(ProductCategory).filter(ProductCategory.id == id).first()
+    if not cat:
+        raise HTTPException(404, "Categoría no encontrada")
+    return serve_image("categories", id)
+
+
+@router.post("/categories/{id}/image")
+async def upload_category_image(
+    id: int,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    """Sube o reemplaza la imagen de la categoría."""
+    cat = db.query(ProductCategory).filter(ProductCategory.id == id).first()
+    if not cat:
+        raise HTTPException(404, "Categoría no encontrada")
+    await save_image("categories", id, file)
+    return {"message": "Imagen actualizada", "url": f"/api/inventory/categories/{id}/image"}
+
+
+@router.delete("/categories/{id}/image")
+def delete_category_image(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    """Elimina la imagen de la categoría."""
+    cat = db.query(ProductCategory).filter(ProductCategory.id == id).first()
+    if not cat:
+        raise HTTPException(404, "Categoría no encontrada")
+    delete_image("categories", id)
+    return {"message": "Imagen eliminada"}
+
+
 @router.delete("/categories/{id}")
 def delete_category(
     id: int,
@@ -80,7 +119,11 @@ def list_products(
         q = q.filter(Product.category_id == category_id)
     if low_stock:
         q = q.filter(Product.stock <= Product.min_stock)
-    return q.all()
+    products = q.all()
+    return [
+        ProductResponse.model_validate(p).model_copy(update={"has_image": get_image_path("products", p.id) is not None})
+        for p in products
+    ]
 
 
 @router.get("/products/{id}", response_model=ProductResponse)
@@ -88,7 +131,7 @@ def get_product(id: int, db: Session = Depends(get_db), _: User = Depends(get_cu
     p = db.query(Product).filter(Product.id == id).first()
     if not p:
         raise HTTPException(404, "Producto no encontrado")
-    return p
+    return ProductResponse.model_validate(p).model_copy(update={"has_image": get_image_path("products", p.id) is not None})
 
 
 @router.post("/products", response_model=ProductResponse)
@@ -123,11 +166,58 @@ def update_product(
     p = db.query(Product).filter(Product.id == id).first()
     if not p:
         raise HTTPException(404, "Producto no encontrado")
-    for k, v in data.model_dump(exclude_unset=True).items():
+    updates = data.model_dump(exclude_unset=True)
+    # Asegurar min_stock y stock como Decimal para SQLAlchemy Numeric
+    if "min_stock" in updates and updates["min_stock"] is not None:
+        from decimal import Decimal
+        updates["min_stock"] = Decimal(str(updates["min_stock"]))
+    if "stock" in updates and updates["stock"] is not None:
+        from decimal import Decimal
+        updates["stock"] = Decimal(str(updates["stock"]))
+    for k, v in updates.items():
         setattr(p, k, v)
+    db.flush()
     db.commit()
     db.refresh(p)
     return p
+
+
+@router.get("/products/{id}/image")
+def get_product_image(id: int, db: Session = Depends(get_db)):
+    """Sirve la imagen del producto si existe."""
+    p = db.query(Product).filter(Product.id == id).first()
+    if not p:
+        raise HTTPException(404, "Producto no encontrado")
+    return serve_image("products", id)
+
+
+@router.post("/products/{id}/image")
+async def upload_product_image(
+    id: int,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    """Sube o reemplaza la imagen del producto."""
+    p = db.query(Product).filter(Product.id == id).first()
+    if not p:
+        raise HTTPException(404, "Producto no encontrado")
+    await save_image("products", id, file)
+    return {"message": "Imagen actualizada", "url": f"/api/inventory/products/{id}/image"}
+
+
+@router.delete("/products/{id}/image")
+def delete_product_image(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    """Elimina la imagen del producto."""
+    p = db.query(Product).filter(Product.id == id).first()
+    if not p:
+        raise HTTPException(404, "Producto no encontrado")
+    delete_image("products", id)
+    return {"message": "Imagen eliminada"}
 
 
 @router.delete("/products/{id}")

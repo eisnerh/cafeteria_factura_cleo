@@ -66,14 +66,15 @@ npm run dev
 
 | Módulo       | Descripción                                      |
 |-------------|---------------------------------------------------|
+| Caja        | Apertura/cierre de caja, monto inicial, diferencias |
 | Inventario  | Productos, categorías, movimientos, alertas stock |
-| Mesas      | Mapa visual, apertura/cierre, asignación camarero |
-| Pedidos    | Creación, split por ítems o por iguales           |
-| Facturación| FE, TE, NC, ND - modo simulación Hacienda CR      |
-| Clientes   | Registro, NIT para facturación                    |
-| Gastos     | Categorías, proveedores, reportes rentabilidad    |
-| Reservas   | Calendario local (sin integración externa)        |
-| Reportes   | Ventas, productos más vendidos, ingresos vs gastos|
+| Mesas       | Mapa visual, apertura/cierre, asignación camarero |
+| Pedidos     | Creación, split por ítems o por iguales           |
+| Facturación | FE, TE, NC, ND - modo simulación Hacienda CR      |
+| Clientes    | Registro, NIT para facturación                    |
+| Gastos      | Categorías, proveedores, reportes rentabilidad    |
+| Reservas    | Calendario local (sin integración externa)        |
+| Reportes    | Ventas, productos más vendidos, ingresos vs gastos |
 
 ## Configuración por Entorno
 
@@ -83,12 +84,24 @@ npm run dev
 
 Variable de entorno `APP_ENV` selecciona el archivo (`dev` por defecto).
 
-## Personalización del logo
+## Personalización
 
-Para mostrar el logo de tu cafetería en el sidebar y la pantalla de login:
+### Nombre del negocio
+
+El título de la pestaña del navegador y el texto que se muestra cuando no hay logo usan el nombre de tu restaurante o cafetería. En `frontend/.env`:
+
+```
+VITE_APP_NAME=Mi Cafetería
+```
+
+Si no se configura, se usa "Cafetería CLEO" por defecto.
+
+### Logo
+
+Para mostrar el logo en el sidebar y la pantalla de login:
 
 1. **Opción A** – Coloca tu logo en `frontend/public/logo.png`
-2. Crea o edita `frontend/.env` y añade:
+2. En `frontend/.env` añade:
    ```
    VITE_LOGO_URL=/logo.png
    ```
@@ -96,9 +109,7 @@ Para mostrar el logo de tu cafetería en el sidebar y la pantalla de login:
    ```
    VITE_LOGO_URL=https://tu-sitio.com/logo.png
    ```
-4. Reinicia el servidor del frontend (`npm run dev`).
-
-Si no se configura, se mostrará el texto "Cafetería CLEO" por defecto.
+4. Reinicia el servidor (`npm run dev`).
 
 ## Datos de prueba
 

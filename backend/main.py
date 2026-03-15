@@ -9,13 +9,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, get_db, init_db
 from app.models.base import Base
 from app.models import *  # noqa: F401, F403 - Registrar todos los modelos
-from app.api.routes import auth, users, inventory, clients, tables, orders, expenses, invoices, reservations, reports, settings
+from app.api.routes import auth, users, inventory, clients, tables, orders, expenses, invoices, reservations, reports, settings, cash_register
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Inicialización al arranque: crear tablas si no existen."""
+    """Inicialización al arranque: crear tablas y directorio uploads."""
     init_db()
+    from app.upload_utils import UPLOADS_DIR
+    UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
     yield
     # Shutdown si fuera necesario
 
@@ -47,6 +49,7 @@ app.include_router(invoices.router, prefix="/api")
 app.include_router(reservations.router, prefix="/api")
 app.include_router(reports.router, prefix="/api")
 app.include_router(settings.router, prefix="/api")
+app.include_router(cash_register.router, prefix="/api")
 
 
 @app.get("/")

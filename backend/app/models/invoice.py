@@ -21,7 +21,7 @@ class Invoice(Base, TimestampMixin):
     order_id = Column(Integer, ForeignKey("orders.id"))
     tipo_documento = Column(String(5), nullable=False)  # FE, TE, NC, ND
     clave = Column(String(50), unique=True)
-    consecutivo = Column(String(20))
+    consecutivo = Column(String(50))
     estado_hacienda = Column(String(50))  # aceptado, rechazado, pendiente
     xml_content = Column(Text)
     pdf_path = Column(String(500))

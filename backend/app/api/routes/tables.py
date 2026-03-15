@@ -2,10 +2,11 @@
 from datetime import datetime
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.upload_utils import delete_image, save_image, serve_image
 from app.models import Table, TableSession
 from app.schemas.table import (
     TableCreate, TableUpdate, TableResponse,
@@ -56,6 +57,44 @@ def delete_table(
     return {"message": "Mesa eliminada"}
 
 
+@router.get("/{id}/image")
+def get_table_image(id: int, db: Session = Depends(get_db)):
+    """Sirve la imagen de la mesa si existe."""
+    t = db.query(Table).filter(Table.id == id).first()
+    if not t:
+        raise HTTPException(404, "Mesa no encontrada")
+    return serve_image("tables", id)
+
+
+@router.post("/{id}/image")
+async def upload_table_image(
+    id: int,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    """Sube o reemplaza la imagen de la mesa."""
+    t = db.query(Table).filter(Table.id == id).first()
+    if not t:
+        raise HTTPException(404, "Mesa no encontrada")
+    await save_image("tables", id, file)
+    return {"message": "Imagen actualizada", "url": f"/api/tables/{id}/image"}
+
+
+@router.delete("/{id}/image")
+def delete_table_image(
+    id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(require_role("administrador")),
+):
+    """Elimina la imagen de la mesa."""
+    t = db.query(Table).filter(Table.id == id).first()
+    if not t:
+        raise HTTPException(404, "Mesa no encontrada")
+    delete_image("tables", id)
+    return {"message": "Imagen eliminada"}
+
+
 @router.patch("/{id}", response_model=TableResponse)
 def update_table(
     id: int,
@@ -71,6 +110,26 @@ def update_table(
     db.commit()
     db.refresh(t)
     return t
+
+
+@router.get("/{table_id}/open-session")
+def get_open_session(
+    table_id: int,
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_user),
+):
+    """Obtiene la sesión abierta de una mesa (cuando está ocupada)."""
+    sess = (
+        db.query(TableSession)
+        .filter(
+            TableSession.table_id == table_id,
+            TableSession.closed_at.is_(None),
+        )
+        .first()
+    )
+    if not sess:
+        raise HTTPException(404, "No hay sesión abierta para esta mesa")
+    return {"session_id": sess.id}
 
 
 @router.post("/{table_id}/sessions", response_model=TableSessionResponse)

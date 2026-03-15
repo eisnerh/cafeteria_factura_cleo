@@ -20,11 +20,14 @@ class Order(Base, TimestampMixin):
     id = Column(Integer, primary_key=True, index=True)
     session_id = Column(Integer, ForeignKey("table_sessions.id"))
     client_id = Column(Integer, ForeignKey("clients.id"))
+    cash_register_id = Column(Integer, ForeignKey("cash_register_sessions.id"), nullable=True)
     status = Column(String(30), default="pendiente")
     notes = Column(String(500))
     printed = Column(Boolean, default=False)
+    payment_type = Column(String(30), nullable=True)  # efectivo, sinpe, tarjeta_credito, tarjeta_debito
 
     session = relationship("TableSession", back_populates="orders")
+    cash_register = relationship("CashRegisterSession", back_populates="orders")
     client = relationship("Client", back_populates="orders")
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
     splits = relationship("OrderSplit", back_populates="order", cascade="all, delete-orphan")

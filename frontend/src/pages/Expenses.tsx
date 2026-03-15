@@ -2,12 +2,20 @@ import { useState, useEffect } from 'react';
 import api, { apiFetch } from '../api/client';
 import './Expenses.css';
 
+const PAYMENT_TYPES = [
+  { value: 'efectivo', label: 'Efectivo' },
+  { value: 'sinpe', label: 'Sinpe' },
+  { value: 'tarjeta_credito', label: 'Tarjeta de crédito' },
+  { value: 'tarjeta_debito', label: 'Tarjeta de débito' },
+] as const;
+
 interface Expense {
   id: number;
   amount: number;
   description?: string;
   category_id?: number;
   supplier_id?: number;
+  payment_type?: string;
 }
 
 interface Supplier {
@@ -32,9 +40,16 @@ export default function Expenses() {
   const [editMode, setEditMode] = useState<'category' | 'supplier' | null>(null);
   const [editId, setEditId] = useState<number | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<{ type: 'expense' | 'category' | 'supplier'; id: number } | null>(null);
-  const [expenseForm, setExpenseForm] = useState({ amount: '', description: '', category_id: '' as string | number, supplier_id: '' as string | number });
+  const [expenseForm, setExpenseForm] = useState({ amount: '', description: '', category_id: '' as string | number, supplier_id: '' as string | number, payment_type: 'efectivo' as string });
   const [categoryForm, setCategoryForm] = useState({ name: '' });
   const [supplierForm, setSupplierForm] = useState({ name: '', contact: '', phone: '', email: '' });
+  const [currentCashRegisterId, setCurrentCashRegisterId] = useState<number | null>(null);
+
+  useEffect(() => {
+    api.get<{ open: boolean; session: { id: number } | null }>('/cash-register/current')
+      .then(r => setCurrentCashRegisterId(r.data?.open && r.data?.session ? r.data.session.id : null))
+      .catch(() => setCurrentCashRegisterId(null));
+  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -69,9 +84,11 @@ export default function Expenses() {
       description: expenseForm.description || undefined,
       category_id: expenseForm.category_id ? Number(expenseForm.category_id) : undefined,
       supplier_id: expenseForm.supplier_id ? Number(expenseForm.supplier_id) : undefined,
+      cash_register_id: currentCashRegisterId ?? undefined,
+      payment_type: expenseForm.payment_type || 'efectivo',
     });
     setModal(null);
-    setExpenseForm({ amount: '', description: '', category_id: '', supplier_id: '' });
+    setExpenseForm({ amount: '', description: '', category_id: '', supplier_id: '', payment_type: 'efectivo' });
     loadAll();
   };
 
@@ -135,6 +152,35 @@ export default function Expenses() {
     setModal('supplier');
   };
 
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+
+  const openEditExpense = (ex: Expense) => {
+    setEditingExpense(ex);
+    setExpenseForm({
+      amount: String(ex.amount ?? ''),
+      description: ex.description || '',
+      category_id: ex.category_id ?? '',
+      supplier_id: ex.supplier_id ?? '',
+      payment_type: ex.payment_type || 'efectivo',
+    });
+    setModal('expense');
+  };
+
+  const handleUpdateExpense = async () => {
+    if (!editingExpense) return;
+    await api.patch(`/expenses/${editingExpense.id}`, {
+      amount: parseFloat(expenseForm.amount) || 0,
+      description: expenseForm.description || undefined,
+      category_id: expenseForm.category_id ? Number(expenseForm.category_id) : undefined,
+      supplier_id: expenseForm.supplier_id ? Number(expenseForm.supplier_id) : undefined,
+      payment_type: expenseForm.payment_type || 'efectivo',
+    });
+    setModal(null);
+    setEditingExpense(null);
+    setExpenseForm({ amount: '', description: '', category_id: '', supplier_id: '', payment_type: 'efectivo' });
+    loadAll();
+  };
+
   if (loading) return <div className="page"><p>Cargando...</p></div>;
 
   return (
@@ -142,7 +188,7 @@ export default function Expenses() {
       <div className="page-header">
         <h1>Gastos</h1>
         <div className="header-actions">
-          <button className="btn primary" onClick={() => { setModal('expense'); setExpenseForm({ amount: '', description: '', category_id: '', supplier_id: '' }); }}>+ Nuevo gasto</button>
+          <button className="btn primary" onClick={() => { setModal('expense'); setExpenseForm({ amount: '', description: '', category_id: '', supplier_id: '', payment_type: 'efectivo' }); api.get<{ open: boolean; session: { id: number } | null }>('/cash-register/current').then(r => setCurrentCashRegisterId(r.data?.open && r.data?.session ? r.data.session.id : null)).catch(() => setCurrentCashRegisterId(null)); }}>+ Nuevo gasto</button>
           <button className="btn" onClick={() => { setModal('category'); setEditMode(null); setCategoryForm({ name: '' }); }}>+ Categoría</button>
           <button className="btn" onClick={() => { setModal('supplier'); setEditMode(null); setSupplierForm({ name: '', contact: '', phone: '', email: '' }); }}>+ Proveedor</button>
         </div>
@@ -153,7 +199,7 @@ export default function Expenses() {
           <h3>Gastos recientes</h3>
           <table className="data-table">
             <thead>
-              <tr><th>Monto</th><th>Descripción</th><th>Categoría</th><th>Proveedor</th><th></th></tr>
+              <tr><th>Monto</th><th>Descripción</th><th>Categoría</th><th>Proveedor</th><th>Pago</th><th></th></tr>
             </thead>
             <tbody>
               {expenses.map((ex) => (
@@ -162,7 +208,9 @@ export default function Expenses() {
                   <td>{ex.description || '-'}</td>
                   <td>{categories.find((c) => c.id === ex.category_id)?.name || '-'}</td>
                   <td>{suppliers.find((s) => s.id === ex.supplier_id)?.name || '-'}</td>
+                  <td>{PAYMENT_TYPES.find(p => p.value === ex.payment_type)?.label || ex.payment_type || '-'}</td>
                   <td>
+                    <button className="btn-sm" onClick={() => openEditExpense(ex)}>Editar</button>
                     <button className="btn-sm btn-danger" onClick={() => setDeleteConfirm({ type: 'expense', id: ex.id })}>Eliminar</button>
                   </td>
                 </tr>
@@ -215,11 +263,20 @@ export default function Expenses() {
       )}
 
       {modal === 'expense' && (
-        <div className="modal-overlay" onClick={() => setModal(null)}>
+        <div className="modal-overlay" onClick={() => { setModal(null); setEditingExpense(null); setExpenseForm({ amount: '', description: '', category_id: '', supplier_id: '', payment_type: 'efectivo' }); }}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Nuevo gasto</h2>
+            <h2>{editingExpense ? 'Editar gasto' : 'Nuevo gasto'}</h2>
+            {!editingExpense && (
+              <p className="expense-caja-hint">
+                {currentCashRegisterId ? '✓ Se descontará de la caja abierta' : '⚠ No hay caja abierta. El gasto no se descontará.'}
+              </p>
+            )}
             <input type="number" step="0.01" placeholder="Monto *" value={expenseForm.amount} onChange={(e) => setExpenseForm((f) => ({ ...f, amount: e.target.value }))} />
             <input placeholder="Descripción" value={expenseForm.description} onChange={(e) => setExpenseForm((f) => ({ ...f, description: e.target.value }))} />
+            <label>Tipo de pago</label>
+            <select value={expenseForm.payment_type} onChange={(e) => setExpenseForm((f) => ({ ...f, payment_type: e.target.value }))}>
+              {PAYMENT_TYPES.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+            </select>
             <select value={expenseForm.category_id} onChange={(e) => setExpenseForm((f) => ({ ...f, category_id: e.target.value }))}>
               <option value="">Sin categoría</option>
               {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -229,8 +286,12 @@ export default function Expenses() {
               {suppliers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
             <div className="modal-actions">
-              <button onClick={() => setModal(null)}>Cancelar</button>
-              <button className="btn primary" onClick={handleCreateExpense} disabled={!expenseForm.amount}>Crear</button>
+              <button onClick={() => { setModal(null); setEditingExpense(null); setExpenseForm({ amount: '', description: '', category_id: '', supplier_id: '', payment_type: 'efectivo' }); }}>Cancelar</button>
+              {editingExpense ? (
+                <button className="btn primary" onClick={handleUpdateExpense} disabled={!expenseForm.amount}>Guardar</button>
+              ) : (
+                <button className="btn primary" onClick={handleCreateExpense} disabled={!expenseForm.amount}>Crear</button>
+              )}
             </div>
           </div>
         </div>

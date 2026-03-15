@@ -3,6 +3,7 @@ from app.models.user import User, Role, PasswordResetToken
 from app.models.client import Client
 from app.models.product import Product, ProductMovement, ProductCategory
 from app.models.table import Table, TableState, TableSession
+from app.models.cash_register import CashRegisterSession
 from app.models.order import Order, OrderItem, OrderSplit
 from app.models.invoice import Invoice, InvoiceItem, InvoiceType
 from app.models.reservation import Reservation
@@ -20,6 +21,7 @@ __all__ = [
     "Table",
     "TableState",
     "TableSession",
+    "CashRegisterSession",
     "Order",
     "OrderItem",
     "OrderSplit",

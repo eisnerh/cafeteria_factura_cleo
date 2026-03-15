@@ -28,6 +28,7 @@ class OrderItemResponse(OrderItemBase):
 class OrderBase(BaseModel):
     session_id: Optional[int] = None
     client_id: Optional[int] = None
+    cash_register_id: Optional[int] = None
     notes: Optional[str] = None
 
 
@@ -38,6 +39,7 @@ class OrderCreate(OrderBase):
 class OrderUpdate(BaseModel):
     status: Optional[str] = None
     notes: Optional[str] = None
+    payment_type: Optional[str] = None
 
 
 class OrderSplitRequest(BaseModel):
@@ -49,6 +51,7 @@ class OrderResponse(OrderBase):
     id: int
     status: str
     printed: bool
+    payment_type: Optional[str] = None
     items: List[OrderItemResponse] = []
     created_at: Optional[datetime] = None
 

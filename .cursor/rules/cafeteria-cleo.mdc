@@ -1,0 +1,48 @@
+---
+description: Contexto y convenciones del proyecto Cafetería CLEO
+alwaysApply: true
+---
+
+# Cafetería CLEO - Guía para el Agente
+
+## Descripción
+Sistema de gestión para cafetería/restaurante. **Backend**: FastAPI + SQLAlchemy + PostgreSQL. **Frontend**: React + TypeScript + Vite.
+
+## Lenguaje
+- **Interfaz de usuario**: Español (labels, mensajes, placeholders).
+- **Código**: Variables y funciones en inglés. Comentarios en español o inglés.
+
+## Estructura
+- `backend/` — API FastAPI, modelos, rutas en `app/api/routes/`
+- `frontend/` — React en `src/`, páginas en `src/pages/`
+- `backend/uploads/` — Imágenes de logo, productos, categorías, mesas
+
+## Patrones clave
+
+### API
+- Rutas con prefijo `/api` (ej: `/api/inventory/products`, `/api/orders`)
+- Auth: Bearer token en header. `require_role("administrador", "camarero", ...)` para permisos
+- Imágenes: `POST /{recurso}/{id}/image`, `GET /{recurso}/{id}/image`, `DELETE /{recurso}/{id}/image`
+
+### Frontend
+- `api` (api/client.ts): `get`, `post`, `patch`, `delete`, `upload`
+- Contextos: `AuthContext`, `LogoContext` (logo global con `refreshLogo`)
+- Páginas: Dashboard, POS, Inventario, Mesas, Pedidos, Clientes, Gastos, Facturación, Reservas, Reportes, Usuarios, Configuración
+
+### Pedidos para llevar
+- `notes` con prefijo `PARA_LLEVAR:Nombre` identifica pedidos para llevar
+- `GET /orders?status=pendiente&take_away=true` lista pendientes
+- Flujo: "Agregar a lista" → crear pedido pendiente → "Cobrar" cuando recoge
+
+### Stock bajo
+- Productos con `min_stock > 0` y `stock <= min_stock`
+- URL `/inventory?lowStock=1` abre inventario filtrado
+- Link "Hacer pedido" lleva al POS
+
+### Logo
+- LogoContext sincroniza en todo el sistema (Layout, Login, POS, Settings)
+- Al cambiar en Configuración se llama `refreshLogo()` para actualizar vistas
+
+## Estilos
+- CSS modules o archivos por página (ej: `POS.css`, `Tables.css`)
+- Variables en `index.css`: `--green-main`, `--cream`, `--border`, etc.

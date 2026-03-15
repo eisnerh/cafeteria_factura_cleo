@@ -1,0 +1,214 @@
+.cash-register-page .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.cash-register-page .cash-register-actions .btn {
+  padding: 1rem 2rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border-radius: var(--radius);
+  min-width: 160px;
+}
+
+.cash-register-page .modal input[type="number"],
+.cash-register-page .modal input[type="text"] {
+  padding: 1rem 1.25rem;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.cash-register-page .modal .mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.cash-register-page .modal-actions button {
+  padding: 0.9rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.cash-register-status-card h2,
+.cash-register-history h2 {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.cash-register-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cash-register-stats .stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cash-register-stats .stat-row:last-child {
+  border-bottom: none;
+}
+
+.cash-register-stats .stat-row.total {
+  font-size: 1.1rem;
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+  border-top: 2px solid var(--green-pale);
+  color: var(--green-dark);
+}
+
+.cash-register-stats .stat-row .sales {
+  color: var(--green-main);
+}
+
+.cash-register-stats .stat-row .expenses {
+  color: var(--red-alert);
+}
+
+.cash-register-closed-hint {
+  margin-bottom: 1.5rem;
+}
+
+.cash-register-closed-hint p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.cash-register-history .no-history {
+  margin: 0;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.history-item {
+  padding: 1rem;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.history-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.history-id {
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
+.history-date,
+.history-closed {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.history-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.history-amounts .diff-ok {
+  color: var(--green-main);
+  font-weight: 600;
+}
+
+.history-amounts .diff-bad {
+  color: var(--red-alert);
+  font-weight: 600;
+}
+
+/* Estados de diferencia en cierre */
+.cash-diff-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.cash-diff-badge.diff-zero {
+  background: rgba(5, 150, 105, 0.15);
+  color: var(--green-main);
+}
+
+.cash-diff-badge.diff-surplus {
+  background: rgba(59, 130, 246, 0.15);
+  color: #2563eb;
+}
+
+.cash-diff-badge.diff-missing,
+.cash-diff-badge.diff-short {
+  background: rgba(220, 38, 38, 0.12);
+  color: var(--red-alert);
+}
+
+.cash-close-preview,
+.cash-close-feedback {
+  margin: 1rem 0 0;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.cash-close-feedback.diff-zero {
+  background: rgba(5, 150, 105, 0.1);
+  border: 1px solid var(--green-pale);
+  color: var(--green-main);
+}
+
+.cash-close-feedback.diff-surplus {
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #2563eb;
+}
+
+.cash-close-feedback.diff-missing {
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  color: var(--red-alert);
+}
+
+.history-notes {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Botones grandes en Caja */
+.cash-register-actions .btn {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  min-width: 160px;
+}
+
+/* Botones Abrir/Cerrar caja más grandes */
+.cash-register-actions .btn {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+.modal-desc {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}

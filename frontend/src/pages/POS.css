@@ -46,6 +46,24 @@
   font-size: 1.5rem;
 }
 
+.pos-logo-img {
+  max-height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.pos-logo-img {
+  max-height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.pos-logo-img {
+  max-height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
 .pos-date {
   font-size: 0.875rem;
   color: var(--text-secondary);
@@ -58,9 +76,51 @@
   gap: 1rem;
 }
 
-.pos-order-count {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
+.pos-cart-badge {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--green-dark);
+  padding: 0.4rem 0.8rem;
+  background: var(--green-pale);
+  border-radius: var(--radius-full);
+}
+
+.pos-btn-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--green-main);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+.pos-btn-home:hover {
+  background: var(--green-dark);
+  color: white;
+}
+
+/* Legacy - no usados en versión simplificada */
+.pos-cart-badge {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--green-dark);
+}
+
+.pos-btn-home {
+  padding: 0.6rem 1rem;
+  background: var(--green-pale);
+  color: var(--green-dark);
+  border-radius: var(--radius-sm);
+  font-size: 1.25rem;
+  text-decoration: none;
+}
+.pos-btn-home:hover {
+  background: var(--green-main);
+  color: white;
 }
 
 .pos-btn-report {
@@ -236,11 +296,11 @@
   color: var(--red-alert);
 }
 
-/* Products grid */
+/* Products grid - tarjetas más grandes */
 .pos-products {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.25rem;
 }
 
 .product-card {
@@ -310,13 +370,13 @@
   position: absolute;
   bottom: 1rem;
   right: 1rem;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--green-dark);
   color: white;
   border: none;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -371,12 +431,12 @@
 
 .order-type button {
   flex: 1;
-  padding: 0.6rem 1rem;
-  border: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  border: 2px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--cream);
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .order-type button.active {
@@ -481,14 +541,14 @@
 
 .btn-checkout {
   width: 100%;
-  padding: 0.9rem;
+  padding: 1.1rem 1.5rem;
   margin-top: 1rem;
   background: var(--green-dark);
   color: white;
   border: none;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  font-size: 1rem;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 1.15rem;
 }
 
 .btn-checkout:hover:not(:disabled) {
@@ -500,9 +560,292 @@
   cursor: not-allowed;
 }
 
+.pos-checkout-error {
+  color: var(--red-alert);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* Panel pedidos para llevar pendientes */
+.pos-pending-panel {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--cream);
+}
+
+.pos-pending-panel h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.pos-pending-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pos-pending-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+}
+
+.pos-pending-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.pos-pending-id {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--green-dark);
+}
+
+.pos-pending-name {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.pos-pending-total {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--green-main);
+}
+
+.pos-pending-cobrar {
+  padding: 0.4rem 0.8rem;
+  background: var(--green-dark);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pos-pending-cobrar:hover:not(:disabled) {
+  background: var(--green-main);
+}
+
+.pos-pending-cobrar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .pos-loading {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 50vh;
+}
+
+/* Tabs y historial */
+.pos-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 1.5rem;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+.pos-tabs button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+}
+
+.pos-tabs button:hover {
+  color: var(--text-primary);
+}
+
+.pos-tabs button.active {
+  color: var(--green-main);
+  border-bottom-color: var(--green-main);
+}
+
+.pos-historial {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.pos-historial-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pos-historial-header select {
+  margin-bottom: 0;
+}
+
+.pos-btn-abrir-caja {
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+}
+
+.pos-historial select {
+  margin-bottom: 0;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+.pos-historial .orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pos-historial .order-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.pos-historial .order-card .order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.pos-historial .order-card .badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.pos-historial .order-card .order-items {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.pos-historial .order-card .order-items li {
+  padding: 0.2rem 0;
+}
+
+.pos-historial .order-card .total {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.pos-historial .order-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.pos-historial .order-card-actions .btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+}
+
+.pos-historial-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pos-order-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.pos-order-card .order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.pos-order-card .order-id {
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
+.pos-order-card .badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.pos-order-card .order-items {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.pos-order-card .order-items li {
+  padding: 0.2rem 0;
+}
+
+.pos-order-card .total {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Header simplificado */
+.pos-cart-badge {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--green-dark);
+  background: var(--green-pale);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+}
+
+.pos-btn-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--green-main);
+  color: white;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-size: 1.5rem;
+  transition: var(--transition);
+}
+
+.pos-btn-home:hover {
+  background: var(--green-dark);
+  color: white;
 }
