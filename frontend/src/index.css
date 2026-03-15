@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@500;600&display=swap');
 
 * {
   box-sizing: border-box;
@@ -7,50 +7,59 @@
 }
 
 :root {
-  /* Paleta Green Grounds - verdes y crema */
-  --green-dark: #2d5a3d;
-  --green-main: #3d7a52;
-  --green-light: #5a9d6e;
-  --green-pale: #e8f5e9;
-  --cream: #faf8f5;
-  --cream-warm: #f5f0e8;
+  /* Paleta Cafetería - verdes cálidos y cremas */
+  --green-dark: #1e4333;
+  --green-main: #2d6a4f;
+  --green-light: #40916c;
+  --green-pale: #d8f3dc;
+  --green-subtle: rgba(45, 106, 79, 0.06);
+  --cream: #fefcf9;
+  --cream-warm: #f8f4ef;
+  --cream-deep: #ede8e1;
   --white: #ffffff;
-  --text-primary: #1a2e1f;
-  --text-secondary: #4a5d52;
-  --text-muted: #7a8b80;
-  --border: #e0e8e2;
-  --red-alert: #dc3545;
+  --text-primary: #1a2e24;
+  --text-secondary: #495d54;
+  --text-muted: #6b7d75;
+  --border: #e4eae6;
+  --red-alert: #c92a2a;
   --red-badge: #e53935;
-  --radius: 16px;
-  --radius-sm: 12px;
-  --radius-lg: 20px;
-  --shadow: 0 4px 12px rgba(45, 90, 61, 0.08);
-  --shadow-hover: 0 8px 24px rgba(45, 90, 61, 0.12);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --shadow: 0 2px 8px rgba(30, 67, 51, 0.06);
+  --shadow-card: 0 4px 20px rgba(30, 67, 51, 0.08);
+  --shadow-md: 0 4px 20px rgba(30, 67, 51, 0.08);
+  --shadow-hover: 0 12px 40px rgba(30, 67, 51, 0.12);
 
   /* Layout */
   --bg-secondary: var(--cream);
   --bg-sidebar: var(--white);
-  --bg-hover: var(--green-pale);
+  --bg-hover: var(--green-subtle);
   --accent: var(--green-main);
+  --transition: 0.2s ease;
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--cream);
   color: var(--text-primary);
   min-height: 100vh;
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button {
   cursor: pointer;
   font-family: inherit;
+  transition: var(--transition);
 }
 
 a {
   color: var(--green-main);
   text-decoration: none;
+  transition: var(--transition);
 }
 
 #root {

@@ -12,6 +12,7 @@ import Invoices from './pages/Invoices'
 import Reservations from './pages/Reservations'
 import Reports from './pages/Reports'
 import Users from './pages/Users'
+import Settings from './pages/Settings'
 import POS from './pages/POS'
 import './App.css'
 
@@ -37,6 +38,7 @@ function AppRoutes() {
         <Route path="reservations" element={<Reservations />} />
         <Route path="reports" element={<Reports />} />
         <Route path="users" element={<Users />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

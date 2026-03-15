@@ -6,7 +6,7 @@
   --accent-hover: var(--green-light);
   --success: var(--green-light);
   --danger: var(--red-alert);
-  --warning: #f59e0b;
+  --warning: #d97706;
   --card-bg: var(--white);
 }
 
@@ -15,28 +15,35 @@
 }
 
 .page h1 {
-  font-size: 1.5rem;
+  font-size: 1.65rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
 }
 
 .card {
   background: var(--white);
-  border-radius: var(--radius);
-  padding: 1.25rem;
-  box-shadow: var(--shadow);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
   border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: 0 8px 28px rgba(30, 70, 50, 0.1);
 }
 
 .alert {
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.25rem;
   border-radius: var(--radius-sm);
   margin-bottom: 1rem;
+  font-weight: 500;
 }
 
 .alert-warning {
-  background: #fef3c7;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
   color: #92400e;
-  border: 1px solid #fcd34d;
+  border: 1px solid rgba(217, 119, 6, 0.3);
 }

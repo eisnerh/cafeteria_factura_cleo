@@ -5,23 +5,26 @@
 }
 
 .sidebar {
-  width: 260px;
-  background: var(--bg-sidebar);
+  width: 280px;
+  background: linear-gradient(180deg, var(--white) 0%, var(--cream-warm) 100%);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
+  box-shadow: 4px 0 24px rgba(30, 70, 50, 0.04);
 }
 
 .sidebar-header {
-  padding: 1.5rem;
+  padding: 1.75rem;
   border-bottom: 1px solid var(--border);
 }
 
 .sidebar-header h1 {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 400;
   color: var(--text-primary);
+  letter-spacing: 0.02em;
 }
 
 /* Logo de la cafetería: configurar VITE_LOGO_URL en .env */
@@ -34,60 +37,72 @@
 
 .sidebar-nav {
   flex: 1;
-  padding: 1rem 0;
+  padding: 1.25rem 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.2rem;
 }
 
 .sidebar-nav a {
-  padding: 0.75rem 1.5rem;
+  padding: 0.8rem 1.25rem;
   color: var(--text-secondary);
   text-decoration: none;
-  transition: all 0.2s;
+  transition: var(--transition);
+  border-radius: var(--radius-sm);
+  margin: 0 0.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .sidebar-nav a:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
+  background: var(--green-pale);
+  color: var(--green-dark);
 }
 
 .sidebar-nav a.active {
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--green-main) 0%, var(--green-light) 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(45, 106, 79, 0.3);
 }
 
 .sidebar-footer {
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  background: rgba(255,255,255,0.6);
 }
 
 .user-name {
   font-size: 0.875rem;
   color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .btn-logout {
-  padding: 0.5rem;
+  padding: 0.6rem 1rem;
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   color: var(--text-secondary);
   cursor: pointer;
   font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--transition);
 }
 
 .btn-logout:hover {
-  background: var(--bg-hover);
+  background: var(--green-pale);
+  border-color: var(--green-pale);
+  color: var(--green-dark);
 }
 
 .main-content {
   flex: 1;
   overflow-y: auto;
-  padding: 1.5rem;
+  padding: 2rem;
+  background: transparent;
 }
 
 @media (max-width: 768px) {

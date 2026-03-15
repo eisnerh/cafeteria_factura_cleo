@@ -44,11 +44,11 @@ python -m venv .venv
 .venv\Scripts\activate   # Windows
 # source .venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
-python -m scripts.seed     # Crea roles, admin, categorías
+python -m scripts.seed     # Crea roles, usuarios, categorías y datos de prueba
 uvicorn main:app --reload --port 8000
 ```
 
-**Usuario admin por defecto:** `admin@cafeteria.local` / `admin123`
+**Usuarios de prueba:** `admin@cafeteria.local` / `admin123` (admin), `camarero@cafeteria.local` / `camarero123`, `cajero@cafeteria.local` / `cajero123`
 
 ### 3. Frontend
 ```bash
@@ -99,6 +99,24 @@ Para mostrar el logo de tu cafetería en el sidebar y la pantalla de login:
 4. Reinicia el servidor del frontend (`npm run dev`).
 
 Si no se configura, se mostrará el texto "Cafetería CLEO" por defecto.
+
+## Datos de prueba
+
+El comando `python -m scripts.seed` crea datos listos para probar el sistema:
+
+| Tipo | Cantidad | Ejemplos |
+|------|----------|----------|
+| **Usuarios** | 3 | admin/admin123, camarero/camarero123, cajero/cajero123 |
+| **Productos** | 14 | Café Americano, Capuchino, Sandwich Club, Tarta de Manzana, Papas Fritas... |
+| **Categorías productos** | 4 | Bebidas, Comidas, Postres, Snacks |
+| **Clientes** | 4 | Juan Pérez, María García (con NIT), Consumidor Final, Luis Rodríguez |
+| **Mesas** | 6 | Mesa 1-5, Barra (con posiciones para mapa) |
+| **Proveedores** | 3 | Café Britt, Distribuidora Central, Carnicería Don José |
+| **Categorías gastos** | 4 | Proveedores, Servicios, Alquiler, Otros |
+| **Gastos** | 2 | Compra insumos, Internet |
+| **Reservas** | 1 | Reserva mañana para Juan Pérez en Mesa 4 |
+
+Los productos incluyen precio, costo y stock inicial. Las mesas tienen coordenadas para el mapa visual. Puedes volver a ejecutar `python -m scripts.seed`; los datos ya existentes no se duplican.
 
 ## Licencia
 Proyecto de uso interno. Todos los derechos reservados.

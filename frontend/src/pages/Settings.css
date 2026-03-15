@@ -1,0 +1,8 @@
+.settings-card { max-width: 480px; }
+.settings-desc { color: var(--text-secondary); margin-bottom: 1rem; }
+.logo-preview { margin-bottom: 1rem; }
+.logo-preview-img { max-width: 200px; max-height: 80px; object-fit: contain; }
+.logo-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.file-input.hidden { display: none; }
+.settings-hint { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; }
+.alert-error { background: #fee2e2; color: var(--red-alert); }

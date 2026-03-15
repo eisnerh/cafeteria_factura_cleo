@@ -143,7 +143,7 @@ export default function Reservations() {
                 <td>{new Date(r.reserved_date).toLocaleString()}</td>
                 <td>{r.guests_count}</td>
                 <td>{clients.find(c => c.id === r.client_id)?.name || r.client_id || '-'}</td>
-                <td>{tables.find(t => t.id === r.table_id)?.name || r.table_id ?? '-'}</td>
+                <td>{tables.find(t => t.id === r.table_id)?.name ?? (r.table_id ?? '-')}</td>
                 <td><span className={`badge badge-${r.status}`}>{r.status}</span></td>
                 <td>{r.notes || '-'}</td>
                 <td>

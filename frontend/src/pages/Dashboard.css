@@ -1,58 +1,79 @@
 .dashboard h1 {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
   font-size: 1.75rem;
+  font-weight: 600;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
 }
 
 .stat-card {
   background: var(--card-bg);
-  border-radius: 12px;
-  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
   border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
 }
 
 .stat-card h3 {
-  margin: 0 0 0.5rem;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  font-weight: 500;
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .stat-value {
   margin: 0;
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 700;
   color: var(--text-primary);
+  letter-spacing: -0.03em;
 }
 
 .stat-card.warning .stat-value {
   color: var(--warning);
 }
 
+.stat-card.accent {
+  background: linear-gradient(135deg, var(--green-pale) 0%, rgba(255,255,255,0.9) 100%);
+  border-color: var(--green-pale);
+}
+
 .stat-card.accent .stat-value {
-  color: var(--accent);
+  color: var(--green-main);
 }
 
 .welcome-section {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--white) 0%, var(--cream-warm) 100%);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
   border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .welcome-section h2 {
-  margin: 0 0 0.75rem;
-  font-size: 1.25rem;
+  margin: 0 0 1rem;
+  font-size: 1.3rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--green-dark);
+  font-weight: 400;
 }
 
 .welcome-section p {
   margin: 0;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.7;
+  font-size: 1rem;
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { apiFetch, api } from '../api/client';
+import api, { apiFetch } from '../api/client';
 import './Settings.css';
 
 interface LogoResponse {
