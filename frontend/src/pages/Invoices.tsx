@@ -76,6 +76,7 @@ export default function Invoices() {
                 <th>Total</th>
                 <th>Simulado</th>
                 <th>Fecha</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -94,6 +95,25 @@ export default function Invoices() {
                   <td>₡{Number(inv.total || 0).toLocaleString()}</td>
                   <td>{inv.is_simulated ? 'Sí' : 'No'}</td>
                   <td>{inv.created_at ? new Date(inv.created_at).toLocaleDateString() : '-'}</td>
+                  <td onClick={e => e.stopPropagation()}>
+                    <Link
+                      to={`/invoices/${inv.id}`}
+                      className="btn btn-sm"
+                      title="Ver detalle"
+                    >
+                      Ver
+                    </Link>
+                    <a
+                      href={`/invoices/${inv.id}?print=1`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-sm primary"
+                      title="Imprimir factura"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      🖨️ Imprimir
+                    </a>
+                  </td>
                 </tr>
               ))}
             </tbody>

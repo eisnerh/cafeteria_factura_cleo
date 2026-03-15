@@ -198,11 +198,9 @@ export default function POS() {
       })
       setInvoiceModalOrder(null)
       alert('Factura generada correctamente')
-      if (invoiceForm.tipo_documento === 'TE') {
-        const printUrl = `${window.location.origin}/invoices/${data.id}?print=1`
-        const win = window.open(printUrl, '_blank', 'width=800,height=600')
-        if (win) win.focus()
-      }
+      const printUrl = `${window.location.origin}/invoices/${data.id}?print=1`
+      const win = window.open(printUrl, '_blank', 'width=800,height=600')
+      if (win) win.focus()
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Error al facturar')
     } finally {

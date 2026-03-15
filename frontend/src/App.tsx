@@ -20,7 +20,8 @@ import NotFound from './pages/NotFound'
 import './App.css'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
+  if (loading) return <div className="page"><p>Cargando...</p></div>
   if (!user) return <Navigate to="/login" replace />
   return <>{children}</>
 }

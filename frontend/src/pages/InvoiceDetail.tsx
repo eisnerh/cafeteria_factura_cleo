@@ -47,35 +47,14 @@ export default function InvoiceDetail() {
   }, [id])
 
   useEffect(() => {
-    if (searchParams.get('print') === '1' && invoice && printRef.current) {
-      const t = setTimeout(() => handlePrint(), 400)
+    if (searchParams.get('print') === '1' && invoice) {
+      const t = setTimeout(() => window.print(), 500)
       return () => clearTimeout(t)
     }
   }, [invoice, searchParams])
 
   const handlePrint = () => {
-    if (!printRef.current) return
-    const printContent = printRef.current.innerHTML
-    const win = window.open('', '_blank')
-    if (!win) return
-    win.document.write(`
-      <!DOCTYPE html>
-      <html><head>
-        <title>Factura ${invoice?.consecutivo || id}</title>
-        <style>
-          body { font-family: system-ui, sans-serif; padding: 24px; }
-          table { width: 100%; border-collapse: collapse; }
-          th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-          th { background: #f5f5f5; }
-          .header { text-align: center; margin-bottom: 24px; }
-          .totals { margin-top: 16px; text-align: right; }
-          .meta { color: #666; font-size: 0.9em; margin-top: 24px; }
-        </style>
-      </head><body>${printContent}</body></html>
-    `)
-    win.document.close()
-    win.print()
-    win.close()
+    window.print()
   }
 
   if (loading) return <div className="page"><p>Cargando...</p></div>
@@ -93,10 +72,10 @@ export default function InvoiceDetail() {
   return (
     <div className="page invoice-detail-page">
       <div className="page-header">
-        <h1>Factura {invoice.consecutivo || `#${invoice.id}`}</h1>
+        <h1>{invoice.tipo_documento === 'TE' ? 'Tiquete' : 'Factura'} {invoice.consecutivo || `#${invoice.id}`}</h1>
         <div className="invoice-detail-actions">
-          <button type="button" className="btn" onClick={handlePrint}>
-            🖨️ Imprimir
+          <button type="button" className="btn primary" onClick={handlePrint}>
+            🖨️ {invoice.tipo_documento === 'TE' ? 'Imprimir tiquete' : 'Imprimir factura'}
           </button>
           <Link to="/invoices" className="btn">Volver</Link>
         </div>

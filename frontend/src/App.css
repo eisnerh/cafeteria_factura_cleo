@@ -235,6 +235,35 @@
   margin: 0;
 }
 
+/* Cabecera detalle factura: título y botones en fila */
+.invoice-detail-page .page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.invoice-detail-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* Detalle de factura: título y botones en línea */
+.invoice-detail-page .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.invoice-detail-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
 /* Modales: overlay y tarjeta */
 .modal-overlay {
   position: fixed;
@@ -628,4 +657,21 @@
   max-width: 400px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Impresión: ocultar menú y mostrar solo el comprobante (tiquete/factura) */
+@media print {
+  .sidebar,
+  .sidebar-more,
+  .invoice-detail-actions,
+  .invoice-detail-page .page-header {
+    display: none !important;
+  }
+  .main-content {
+    padding: 0 !important;
+  }
+  .invoice-print-content {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
 }
